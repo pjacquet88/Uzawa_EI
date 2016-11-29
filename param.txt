@@ -11,7 +11,7 @@ FICHIER DE LECTURE DES PARAMETRES
 [T_end] Temps final de l'expérience (en s)
 30
 [Dt] Valeur d'un pas de temps
-0.1
+1.0
 [Visc] Viscosité du fluide
 1.0
 [Mu] Coefficient pour la méthode d'Uzawa
@@ -24,3 +24,5 @@ FICHIER DE LECTURE DES PARAMETRES
 1000
 [nIterMaxUZ] Nombre d'itération max pour la méthode d'Uzawa
 1000
+p
+2
