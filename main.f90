@@ -1,1 +1,2 @@
-bla bla bla
+program bla
+end program bla
