@@ -10,7 +10,7 @@ REAL*8,PUBLIC           ::    coeffX,coeffY,coeffDiag
 REAL*8,PUBLIC           ::    epsilonGC,epsilonUZ
 INTEGER,PUBLIC          ::    nIterMaxGC, nIterMaxUZ
 
-PUBLIC :: bij ,read_param,  norme, TEST_read_param
+PUBLIC :: bij ,read_param,  norme, TEST_read_param , printvector
 CONTAINS
 
 FUNCTION bij(i,j,N)
@@ -90,7 +90,53 @@ FUNCTION norme(V)
 
 END FUNCTION
 
+subroutine printvector(U,Nx,Ny,dx,dy,N)
+		real*8,dimension(Nx*Ny),intent(in)::U
+		integer,intent(in)::Nx,Ny,N
+		real*8, intent(in)::dx,dy
+		integer::i,j
+		character(len=20)::F_NAME
 
+		if (N<10) then
+			F_NAME='fichier/T'
+			write(F_NAME (10:10),'(I1)') N
+			F_NAME(11:14)= '.dat'
+
+		elseif ((N>=10).and.(N<100)) then
+			F_NAME='fichier/T'
+			write(F_NAME (10:11),'(I2)') N
+			F_NAME(12:15)= '.dat'
+
+		elseif ((N>=100).and.(N<1000)) then
+			F_NAME='fichier/T'
+			write(F_NAME (10:12),'(I3)') N
+			F_NAME(13:16)= '.dat'
+
+		else if ((N>=1000).and.(N<10000)) then
+			F_NAME='fichier/T'
+			write(F_NAME (10:13),'(I4)') N
+			F_NAME(14:17)= '.dat'
+
+		else if ((N>=10000).and.(N<100000)) then
+			F_NAME='fichier/T'
+			write(F_NAME (10:14),'(I5)') N
+			F_NAME(15:18)= '.dat'
+		end if
+
+		open(unit=2, file=F_NAME, action="write")
+
+
+		do i=1,Nx
+			do j=1,Ny
+
+
+				write(2,*),i*dx,j*dy,U(bij(i,j,Ny))
+
+			end do
+			write(2,*)
+		end do
+		close(2)
+	end subroutine
 
 
 
