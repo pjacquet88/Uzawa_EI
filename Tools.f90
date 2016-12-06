@@ -1,7 +1,7 @@
 MODULE Tools
   IMPLICIT NONE
 
-  INTEGER,PUBLIC          ::    nx,ny,nl,p
+  INTEGER,PUBLIC          ::    nx,ny,nl,testcase
   REAL*8,PUBLIC           ::    lx,ly,dx,dy
   REAL*8,PUBLIC           ::    t_end,dt, visc, mu
   REAL*8,PUBLIC,PARAMETER ::    gravity = 9.80665
@@ -54,7 +54,7 @@ CONTAINS
     READ(11,*) dummy_string
     READ(11,*) nIterMaxUZ
     READ(11,*) dummy_string
-    READ(11,*) p
+    READ(11,*) testcase
     CLOSE(11)
 
     nl=(nx-1)*(ny-1)
@@ -188,37 +188,63 @@ CONTAINS
     END DO
   END FUNCTION matmulA
 
-  FUNCTION B1transpose(P,dxP)
+  FUNCTION B1transpose(P)
     IMPLICIT NONE
     REAL*8,DIMENSION(:),INTENT(IN)               ::   P
-    REAL*8,DIMENSION((nx-1)*(ny-1)), INTENT(OUT) :: dxP
+    REAL*8,DIMENSION((nx-1)*(ny-1)) :: B1transpose
     INTEGER :: i,j
 
     DO i=1,nx-1
       DO j=1,ny-1
-        dxP(bij(i,j,nx-1))=P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))-P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        dxP=dxP/(2*dx)
+        B1transpose(bij(i,j,nx-1))=P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))-P(bij(i,j+1,nx))-P(bij(i,j,nx))
+        B1transpose=B1transpose/(2*dx)
       END DO
-    END do
+    END DO
 
   END FUNCTION B1transpose
 
-  FUNCTION B2transpose(P,dyP)
+  FUNCTION B2transpose(P)
     IMPLICIT NONE
     REAL*8,DIMENSION(:),INTENT(IN)               ::   P
-    REAL*8,DIMENSION((nx-1)*(ny-1)), INTENT(OUT) :: dyP
+    REAL*8,DIMENSION((nx-1)*(ny-1)) :: B2transpose
     INTEGER :: i,j
 
     DO i=1,nx-1
       DO j=1,ny-1
-        dxP(bij(i,j,nx-1))=-P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))+P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        dyP=dyP/(2*dy)
+        B2transpose(bij(i,j,nx-1))=-P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))+P(bij(i,j+1,nx))-P(bij(i,j,nx))
+        B2transpose=B2transpose/(2*dy)
       END DO
-    END do
+    END DO
 
   END FUNCTION B2transpose
 
-end do
+  FUNCTION B1(U1)
+    IMPLICIT NONE
+    REAL*8,DIMENSION(:),INTENT(IN)::U1
+    REAL*8,DIMENSION(nx*ny)::B1
+    INTEGER::i,j
+
+    DO i=1,nx
+      DO j=1,ny
+        B1(bij(i,j,nx)) = -(U1(bij(i+1,j+1,nx-1)) + U1(bij(i+1,j,nx-1)) - U1(bij(i,j+1,nx-1)) - U1(bij(i,j,nx-1)))/(2*dx)
+      END DO
+    END DO
+  END FUNCTION B1
+
+  FUNCTION B2(U2)
+    IMPLICIT NONE
+    REAL*8,DIMENSION(:),INTENT(IN)::U2
+    REAL*8,DIMENSION(nx*ny)::B2
+    INTEGER::i,j
+
+    DO i=1,nx
+      DO j=1,ny
+        B2(bij(i,j,nx)) = -(U2(bij(i,j+1,nx-1)) + U2(bij(i+1,j+1,nx-1)) - U2(bij(i,j,nx-1)) - U2(bij(i+1,j,nx-1)))/(2*dY)
+      END DO
+    END DO
+  END FUNCTION B2
+
+
 
 
 
