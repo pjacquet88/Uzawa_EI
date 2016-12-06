@@ -152,7 +152,7 @@ CONTAINS
           DO i=1,nx-1
              IF (i==1) THEN
                 matmulA((j-1)*(nx-1)+i) = coeffDiag*X(1) + coeffX*X(2) + coeffY*X(nx)
-             ELSE IF (i==nx) THEN
+             ELSE IF (i==nx-1) THEN
                 matmulA((j-1)*(nx-1)+i) = coeffX*X(nx-2) + coeffDiag*X(nx-1) + coeffY*X(2*(nx-1))
              ELSE
                 matmulA((j-1)*(nx-1)+i) = coeffX*X(i-1) + coeffDiag*X(i) + coeffX*X(i+1) + coeffY*X(nx-1+i)
@@ -187,6 +187,38 @@ CONTAINS
        END IF
     END DO
   END FUNCTION matmulA
+
+  FUNCTION B1transpose(P,dxP)
+    IMPLICIT NONE
+    REAL*8,DIMENSION(:),INTENT(IN)               ::   P
+    REAL*8,DIMENSION((nx-1)*(ny-1)), INTENT(OUT) :: dxP
+    INTEGER :: i,j
+
+    DO i=1,nx-1
+      DO j=1,ny-1
+        dxP(bij(i,j,nx-1))=P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))-P(bij(i,j+1,nx))-P(bij(i,j,nx))
+        dxP=dxP/(2*dx)
+      END DO
+    END do
+
+  END FUNCTION B1transpose
+
+  FUNCTION B2transpose(P,dyP)
+    IMPLICIT NONE
+    REAL*8,DIMENSION(:),INTENT(IN)               ::   P
+    REAL*8,DIMENSION((nx-1)*(ny-1)), INTENT(OUT) :: dyP
+    INTEGER :: i,j
+
+    DO i=1,nx-1
+      DO j=1,ny-1
+        dxP(bij(i,j,nx-1))=-P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))+P(bij(i,j+1,nx))-P(bij(i,j,nx))
+        dyP=dyP/(2*dy)
+      END DO
+    END do
+
+  END FUNCTION B2transpose
+
+end do
 
 
 
