@@ -14,13 +14,41 @@ CONTAINS
        f = 2*(y-y*y+x-x*x)
     CASE(2)
        f = sin(x) + cos(y)
-    CASE(3)
-       !f = exp(-(x-Lx/2)*(x-Lx/2))*exp(-(y-Ly/2)*(y-Ly/2))*cos(pi/2*t)
     CASE default
        f = -1
        WRITE(*,*) "bad case"
     END SELECT
   END FUNCTION f
+
+  FUNCTION fx(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    real*8 :: fx
+
+    SELECT CASE(n)
+    CASE(1)
+       fx = 1
+    CASE default
+       fx = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION fx
+
+  FUNCTION fy(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    real*8 :: fy
+
+    SELECT CASE(n)
+    CASE(1)
+       fy = 1
+    CASE default
+       fy = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION fy
 
   FUNCTION g(x,y,t,n)
     IMPLICIT NONE
@@ -40,5 +68,37 @@ CONTAINS
        WRITE(*,*) "bad case"
     END SELECT
   END FUNCTION g
+
+  FUNCTION gx(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    REAL*8 :: gx
+
+    SELECT CASE(n)
+    CASE(1)
+       gx = x
+    CASE default
+       gx = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION gx
+
+  FUNCTION gy(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    REAL*8 :: gy
+
+    SELECT CASE(n)
+    CASE(1)
+       gy = -y
+    CASE default
+       gy = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION gy
+
+
 
 END MODULE Functions

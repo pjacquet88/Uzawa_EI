@@ -25,4 +25,4 @@ FICHIER DE LECTURE DES PARAMETRES
 [nIterMaxUZ] Nombre d'itération max pour la méthode d'Uzawa
 1000
 p
-2
+1

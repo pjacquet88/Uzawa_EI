@@ -1,5 +1,4 @@
 PROGRAM main
-  USE Functions
   USE Solver
   USE Tools
   IMPLICIT NONE
@@ -20,24 +19,24 @@ PROGRAM main
      F2=0
      DO i=1,ny-1
         DO j=1,nx-1
-           F1((i-1)*(nx-1)+j) = f(j*dx,i*dy,(time-1)*dt,testcase)
-           F2((i-1)*(nx-1)+j) = f(j*dx,i*dy,(time-1)*dt,testcase)
+           F1((i-1)*(nx-1)+j) = fx(j*dx,i*dy,(time-1)*dt,testcase)
+           F2((i-1)*(nx-1)+j) = fy(j*dx,i*dy,(time-1)*dt,testcase)
         END DO
-        F1((i-1)*(nx-1)+1) = F1((i-1)*(nx-1)+1) - coeffX*g(0.d1,i*dy,(time-1)*dt,testcase)
-        F2((i-1)*(nx-1)+1) = F2((i-1)*(nx-1)+1) - coeffX*g(0.d1,i*dy,(time-1)*dt,testcase)
-        F1(i*(nx-1)) = F1(i*(nx-1)) - coeffX*g(lx,i*dy,(time-1)*dt,testcase)
-        F2(i*(nx-1)) = F2(i*(nx-1)) - coeffX*g(lx,i*dy,(time-1)*dt,testcase)
+        F1((i-1)*(nx-1)+1) = F1((i-1)*(nx-1)+1) - coeffX*gx(0.d1,i*dy,(time-1)*dt,testcase)
+        F2((i-1)*(nx-1)+1) = F2((i-1)*(nx-1)+1) - coeffX*gy(0.d1,i*dy,(time-1)*dt,testcase)
+        F1(i*(nx-1)) = F1(i*(nx-1)) - coeffX*gx(lx,i*dy,(time-1)*dt,testcase)
+        F2(i*(nx-1)) = F2(i*(nx-1)) - coeffX*gy(lx,i*dy,(time-1)*dt,testcase)
      END DO
      DO j=1,nx-1
-        F1(j) = F1(j) - coeffY*g(j*dx,0.d1,(time-1)*dt,testcase)
-        F2(j) = F2(j) - coeffY*g(j*dx,0.d1,(time-1)*dt,testcase)
-        F1((ny-2)*(nx-1) + j) = F1((ny-2)*(nx-1) + j) - coeffY*g(j*dx,ly,(time-1)*dt,testcase)
-        F2((ny-2)*(nx-1) + j) = F2((ny-2)*(nx-1) + j) - coeffY*g(j*dx,ly,(time-1)*dt,testcase)
+        F1(j) = F1(j) - coeffY*gx(j*dx,0.d1,(time-1)*dt,testcase)
+        F2(j) = F2(j) - coeffY*gy(j*dx,0.d1,(time-1)*dt,testcase)
+        F1((ny-2)*(nx-1) + j) = F1((ny-2)*(nx-1) + j) - coeffY*gx(j*dx,ly,(time-1)*dt,testcase)
+        F2((ny-2)*(nx-1) + j) = F2((ny-2)*(nx-1) + j) - coeffY*gy(j*dx,ly,(time-1)*dt,testcase)
      END DO
 
      F1 = F1 + U1/dt
      F2 = F2 + U2/dt
-     CALL Uzawa(P0,F1,F2,U1,U2,P)
+     CALL Uzawa(P0,F1,F2,U1,U2,P,(time-1)*dt)
 
   END DO
   !

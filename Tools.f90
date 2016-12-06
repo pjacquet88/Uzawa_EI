@@ -100,31 +100,32 @@ CONTAINS
     INTEGER::i,j
     CHARACTER(len=20)::F_NAME
 
-    IF (N<10) THEN
-       F_NAME='fichier/T'
-       WRITE(F_NAME (10:10),'(I1)') N
-       F_NAME(11:14)= '.dat'
-
-    ELSEIF ((N>=10).AND.(N<100)) THEN
-       F_NAME='fichier/T'
-       WRITE(F_NAME (10:11),'(I2)') N
-       F_NAME(12:15)= '.dat'
-
-    ELSEIF ((N>=100).AND.(N<1000)) THEN
-       F_NAME='fichier/T'
-       WRITE(F_NAME (10:12),'(I3)') N
-       F_NAME(13:16)= '.dat'
-
-    ELSE IF ((N>=1000).AND.(N<10000)) THEN
-       F_NAME='fichier/T'
-       WRITE(F_NAME (10:13),'(I4)') N
-       F_NAME(14:17)= '.dat'
-
-    ELSE IF ((N>=10000).AND.(N<100000)) THEN
-       F_NAME='fichier/T'
-       WRITE(F_NAME (10:14),'(I5)') N
-       F_NAME(15:18)= '.dat'
-    END IF
+    WRITE(F_NAME,"(A,I0,'.dat')") 'fichier/T',N 
+    ! IF (N<10) THEN
+    !    F_NAME='fichier/T'
+    !    WRITE(F_NAME (10:10),'(I1)') N
+    !    F_NAME(11:14)= '.dat'
+    !
+    ! ELSEIF ((N>=10).AND.(N<100)) THEN
+    !    F_NAME='fichier/T'
+    !    WRITE(F_NAME (10:11),'(I2)') N
+    !    F_NAME(12:15)= '.dat'
+    !
+    ! ELSEIF ((N>=100).AND.(N<1000)) THEN
+    !    F_NAME='fichier/T'
+    !    WRITE(F_NAME (10:12),'(I3)') N
+    !    F_NAME(13:16)= '.dat'
+    !
+    ! ELSE IF ((N>=1000).AND.(N<10000)) THEN
+    !    F_NAME='fichier/T'
+    !    WRITE(F_NAME (10:13),'(I4)') N
+    !    F_NAME(14:17)= '.dat'
+    !
+    ! ELSE IF ((N>=10000).AND.(N<100000)) THEN
+    !    F_NAME='fichier/T'
+    !    WRITE(F_NAME (10:14),'(I5)') N
+    !    F_NAME(15:18)= '.dat'
+    ! END IF
 
     OPEN(unit=2, file=F_NAME, action="write")
 
@@ -188,61 +189,7 @@ CONTAINS
     END DO
   END FUNCTION matmulA
 
-  FUNCTION B1transpose(P)
-    IMPLICIT NONE
-    REAL*8,DIMENSION(:),INTENT(IN)               ::   P
-    REAL*8,DIMENSION((nx-1)*(ny-1)) :: B1transpose
-    INTEGER :: i,j
 
-    DO i=1,nx-1
-      DO j=1,ny-1
-        B1transpose(bij(i,j,nx-1))=P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))-P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        B1transpose=B1transpose/(2*dx)
-      END DO
-    END DO
-
-  END FUNCTION B1transpose
-
-  FUNCTION B2transpose(P)
-    IMPLICIT NONE
-    REAL*8,DIMENSION(:),INTENT(IN)               ::   P
-    REAL*8,DIMENSION((nx-1)*(ny-1)) :: B2transpose
-    INTEGER :: i,j
-
-    DO i=1,nx-1
-      DO j=1,ny-1
-        B2transpose(bij(i,j,nx-1))=-P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))+P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        B2transpose=B2transpose/(2*dy)
-      END DO
-    END DO
-
-  END FUNCTION B2transpose
-
-  FUNCTION B1(U1)
-    IMPLICIT NONE
-    REAL*8,DIMENSION(:),INTENT(IN)::U1
-    REAL*8,DIMENSION(nx*ny)::B1
-    INTEGER::i,j
-
-    DO i=1,nx
-      DO j=1,ny
-        B1(bij(i,j,nx)) = -(U1(bij(i+1,j+1,nx-1)) + U1(bij(i+1,j,nx-1)) - U1(bij(i,j+1,nx-1)) - U1(bij(i,j,nx-1)))/(2*dx)
-      END DO
-    END DO
-  END FUNCTION B1
-
-  FUNCTION B2(U2)
-    IMPLICIT NONE
-    REAL*8,DIMENSION(:),INTENT(IN)::U2
-    REAL*8,DIMENSION(nx*ny)::B2
-    INTEGER::i,j
-
-    DO i=1,nx
-      DO j=1,ny
-        B2(bij(i,j,nx)) = -(U2(bij(i,j+1,nx-1)) + U2(bij(i+1,j+1,nx-1)) - U2(bij(i,j,nx-1)) - U2(bij(i+1,j,nx-1)))/(2*dY)
-      END DO
-    END DO
-  END FUNCTION B2
 
 
 
