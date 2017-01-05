@@ -17,9 +17,9 @@ FICHIER DE LECTURE DES PARAMETRES
 [Mu] Coefficient pour la méthode d'Uzawa
 1.0
 [EpislonGC] Epsilon pour le gradient conjugué
-1e-7
+1e-8
 [EpsilonUZ] Epsilon pour la méthode d'Uzawa
-1e-7
+1e-8
 [nIterMaxGC] Nombre d'itération max pour le gradient conjugué
 1000
 [nIterMaxUZ] Nombre d'itération max pour la méthode d'Uzawa

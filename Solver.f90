@@ -33,8 +33,8 @@ CONTAINS
        iter = iter+1
     END DO
 
-    WRITE(*,*) "RESIDU GC : ",normR
-    WRITE(*,*) "ITERATION GC : ",iter
+  !  WRITE(*,*) "RESIDU GC : ",normR
+  !  WRITE(*,*) "ITERATION GC : ",iter
 
     DEALLOCATE(R,D,Omega,Rnext)
   END SUBROUTINE GradConjA
@@ -52,19 +52,23 @@ CONTAINS
     P = P0
     DO WHILE ((mu*norm((B1(U1,t) + B2(U2,t))) > epsilonUZ).AND.(iter<nIterMaxUZ))
       RHS1 = F1 - B1transpose(P)
-      WRITE(*,*) "RHS1 : max ",maxval(F1)," min ",minval(F1)
+      ! WRITE(*,*) "RHS1 : max ",maxval(F1)," min ",minval(F1)
       CALL gradConjA(U1,RHS1)
       RHS2 = F2 - B2transpose(P)
-      WRITE(*,*) "RHS2 : max ",maxval(RHS2)," min ",minval(RHS2)
+    !  WRITE(*,*) "RHS2 : max ",maxval(RHS2)," min ",minval(RHS2)
       CALL gradConjA(U2,RHS2)
 
-      WRITE(*,*) "UX : max ",maxval(U1)," min ",minval(U1)
-      WRITE(*,*) "UY : max ",maxval(U2)," min ",minval(U2)
+    !  WRITE(*,*) "UX : max ",maxval(U1)," min ",minval(U1)
+    !  WRITE(*,*) "UY : max ",maxval(U2)," min ",minval(U2)
 
       P = P + mu*(B1(U1,t) + B2(U2,t))
-      WRITE(*,*) "P : max ",maxval(P)," min ",minval(P)
+    !  WRITE(*,*) "P : max ",maxval(P)," min ",minval(P)
 
       iter = iter + 1
+
+      WRITE(*,*) "RESIDU UZAWA : ",mu*norm((B1(U1,t) + B2(U2,t)))
+      WRITE(*,*) "ITERATION UZAWA : ",iter
+
     END DO
 
     WRITE(*,*) "RESIDU UZAWA : ",mu*norm((B1(U1,t) + B2(U2,t)))
@@ -82,9 +86,9 @@ CONTAINS
     DO i=1,nx-1
       DO j=1,ny-1
         B1transpose(bij(i,j,nx-1))=P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))-P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        B1transpose=B1transpose/(2*dx)
       END DO
     END DO
+    B1transpose=B1transpose/(2*dx)
 
   END FUNCTION B1transpose
 
@@ -97,9 +101,10 @@ CONTAINS
     DO i=1,nx-1
       DO j=1,ny-1
         B2transpose(bij(i,j,nx-1))=-P(bij(i+1,j,nx))+P(bij(i+1,j+1,nx))+P(bij(i,j+1,nx))-P(bij(i,j,nx))
-        B2transpose=B2transpose/(2*dy)
       END DO
     END DO
+    B2transpose=B2transpose/(2*dy)
+
 
   END FUNCTION B2transpose
 
@@ -109,6 +114,7 @@ CONTAINS
     REAL*8,INTENT(IN)::t
     REAL*8,DIMENSION(nx*ny)::B1
     INTEGER::i,j
+
 
     B1(bij(1,1,nx)) = -(U1(bij(1,1,nx-1)) + gx(dx,0.d0,t,testcase) - gx(0.d0,dy,t,testcase) - gx(0.d0,0.d0,t,testcase))/(2*dx)
     B1(bij(1,ny,nx)) = -(gx(dx,ly,t,testcase) + U1(bij(1,ny-1,nx-1)) - gx(0.d0,ly,dt,testcase) - gx(0.d0,ly-dy,t,testcase))/(2*dx)
@@ -139,6 +145,7 @@ CONTAINS
     REAL*8,DIMENSION(nx*ny)::B2
     INTEGER::i,j
 
+
     B2(bij(1,1,nx)) = -(U2(bij(1,1,nx-1)) - gy(dx,0.d0,t,testcase) + gy(0.d0,dy,t,testcase) - gy(0.d0,0.d0,t,testcase))/(2*dy)
     B2(bij(1,ny,nx)) = -(gy(dx,ly,t,testcase) - U2(bij(1,ny-1,nx-1)) + gy(0.d0,ly,dt,testcase) - gy(0.d0,ly-dy,t,testcase))/(2*dy)
     B2(bij(nx,1,nx)) = -(-gy(lx,0.d0,t,testcase) + gy(lx,dy,t,testcase) + U2(bij(nx-1,1,nx-1)) - gy(lx-dx,0.d0,t,testcase))/(2*dy)
@@ -158,6 +165,8 @@ CONTAINS
       B2(bij(nx,j,nx)) = -(gy(lx,(j+1)*dy,t,testcase) - gy(lx,j*dy,t,testcase) + U2(bij(nx-1,j,nx-1)) - &
       U2(bij(nx-1,j-1,nx-1)))/(2*dy)
     END DO
+    
+
   END FUNCTION B2
 
 

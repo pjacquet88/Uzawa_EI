@@ -60,7 +60,7 @@ CONTAINS
     nl=(nx-1)*(ny-1)
     dx=lx/nx
     dy=ly/ny
-    coeffDiag=1/dt+2*visc*(1/(dx**2)+1/(dy**2))
+    coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))+1/dt
     coeffX=-visc*(1/(dx**2))
     coeffY=-visc*(1/(dy**2))
   END SUBROUTINE read_param
@@ -100,7 +100,7 @@ CONTAINS
     INTEGER::i,j
     CHARACTER(len=20)::F_NAME
 
-    WRITE(F_NAME,"(A,I0,'.dat')") 'fichier/T',N 
+    WRITE(F_NAME,"(A,I0,'.dat')") 'fichier/T',N
     ! IF (N<10) THEN
     !    F_NAME='fichier/T'
     !    WRITE(F_NAME (10:10),'(I1)') N

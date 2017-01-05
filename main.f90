@@ -4,7 +4,7 @@ PROGRAM main
   IMPLICIT NONE
   REAL*8,DIMENSION(:),ALLOCATABLE:: U1,U2,F1,F2,P,P0
   INTEGER :: i,j,time
-  REAL*8 :: xi,yi,t1,t2,normDiff,normExact
+  REAL*8 :: xi,yi,t1,t2,normDiff,normExact,x,y
 
   CALL CPU_TIME(t1)
   CALL read_param("param.txt")
@@ -14,7 +14,7 @@ PROGRAM main
   U2 = 0
   P0 = 0
 
-  DO time=1,10
+  DO time=1,1
      F1=0
      F2=0
      DO i=1,ny-1
@@ -71,6 +71,55 @@ PROGRAM main
   CLOSE(12)
   CLOSE(13)
   CLOSE(14)
+
+open(unit=4,file='pression_e.dat',action='write')
+open(unit=3,file='pression.dat',action='write')
+do j=1,ny
+  do i=1,nx
+    x=(i-0.5)*dx
+    y=(j-0.5)*dy
+write(4,*),x,y,x+y-1
+write(3,*),x,y,P(bij(i,j,nx))
+  end do
+  write(3,*),' '
+  write(4,*),' '
+end do
+close(3)
+close(4)
+
+open(unit=4,file='vitesse_x_e.dat',action='write')
+open(unit=3,file='vitesse_x.dat',action='write')
+do j=1,ny-1
+  do i=1,nx-1
+    x=(i)*dx
+    y=(j)*dy
+write(4,*),x,y,x
+write(3,*),x,y,U1(bij(i,j,nx-1))
+  end do
+  write(3,*),' '
+  write(4,*),' '
+end do
+close(3)
+close(4)
+
+
+open(unit=4,file='vitesse_y_e.dat',action='write')
+open(unit=3,file='vitesse_y.dat',action='write')
+do j=1,ny-1
+  do i=1,nx-1
+    x=(i)*dx
+    y=(j)*dy
+write(4,*),x,y,-y
+write(3,*),x,y,U2(bij(i,j,nx-1))
+  end do
+  write(3,*),' '
+  write(4,*),' '
+end do
+close(3)
+close(4)
+
+
+
   DEALLOCATE(U1,U2,F1,F2,P,P0)
 
   CALL CPU_TIME(t2)
