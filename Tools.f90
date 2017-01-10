@@ -63,6 +63,7 @@ CONTAINS
     coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))+1/dt
     coeffX=-visc*(1/(dx**2))
     coeffY=-visc*(1/(dy**2))
+
   END SUBROUTINE read_param
 
   SUBROUTINE TEST_read_param()
@@ -190,9 +191,19 @@ CONTAINS
   END FUNCTION matmulA
 
 
+  FUNCTION Moy_0(V)
+    IMPLICIT NONE
+    REAL*8,DIMENSION(:),INTENT(IN)::V
+    REAL*8,DIMENSION(size(V))::Moy_0
+    REAL*8::moy
+    INTEGER::i
 
+    moy=SUM(V)/size(V)
 
-
+    DO i=1,size(V)
+      Moy_0(i)=V(i)-moy
+    END DO
+  END FUNCTION
 
 
 END MODULE Tools

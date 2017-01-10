@@ -27,8 +27,14 @@ CONTAINS
     real*8 :: fx
 
     SELECT CASE(n)
+    CASE(0)
+       fx=0.0
     CASE(1)
        fx = 1
+     CASE(2)
+       fx = 1
+     CASE(3)
+       fx = 0
     CASE default
        fx = -1
        WRITE(*,*) "bad case"
@@ -42,8 +48,14 @@ CONTAINS
     real*8 :: fy
 
     SELECT CASE(n)
+    CASE(0)
+       fy = -gravity
     CASE(1)
        fy = 1
+     CASE(2)
+       fy = 1
+     CASE(3)
+       fy = 0
     CASE default
        fy = -1
        WRITE(*,*) "bad case"
@@ -76,8 +88,14 @@ CONTAINS
     REAL*8 :: gx
 
     SELECT CASE(n)
+    CASE(0)
+       gx = 23.12
     CASE(1)
        gx = x
+     CASE(2)
+       gx = x
+     CASE(3)
+       gx = (1-y)*y
     CASE default
        gx = -1
        WRITE(*,*) "bad case"
@@ -91,13 +109,61 @@ CONTAINS
     REAL*8 :: gy
 
     SELECT CASE(n)
+    CASE(0)
+       gy = 21.61
     CASE(1)
        gy = -y
+     CASE(2)
+       gy = y
+     CASE(3)
+       gy = 0.0
     CASE default
        gy = -1
        WRITE(*,*) "bad case"
     END SELECT
   END FUNCTION gy
+
+  FUNCTION hx(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    REAL*8 :: hx
+
+    SELECT CASE(n)
+    CASE(0)
+       hx = 23.12
+    CASE(1)
+       hx = x
+     CASE(2)
+       hx = x
+     CASE(3)
+       hx = 0
+    CASE default
+       hx = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION hx
+
+  FUNCTION hy(x,y,t,n)
+    IMPLICIT NONE
+    REAL*8,INTENT(IN) :: x,y,t
+    INTEGER,INTENT(IN) :: n
+    REAL*8 :: hy
+
+    SELECT CASE(n)
+    CASE(0)
+       hy = 21.61
+    CASE(1)
+       hy = -y
+     CASE(2)
+       hy = y
+     CASE(3)
+       hy = 0
+    CASE default
+       hy = -1
+       WRITE(*,*) "bad case"
+    END SELECT
+  END FUNCTION hy
 
 
 

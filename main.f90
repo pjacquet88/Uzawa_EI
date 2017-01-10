@@ -2,7 +2,7 @@ PROGRAM main
   USE Solver
   USE Tools
   IMPLICIT NONE
-  REAL*8,DIMENSION(:),ALLOCATABLE:: U1,U2,F1,F2,P,P0
+  REAL*8,DIMENSION(:),ALLOCATABLE:: U1,U2,F1,F2,P,P0,P_int
   INTEGER :: i,j,time
   REAL*8 :: xi,yi,t1,t2,normDiff,normExact,x,y
 
@@ -13,8 +13,9 @@ PROGRAM main
   U1 = 0
   U2 = 0
   P0 = 0
+  P_int=P0
 
-  DO time=1,1
+  DO time=1,10
      F1=0
      F2=0
      DO i=1,ny-1
@@ -28,16 +29,17 @@ PROGRAM main
         F2(i*(nx-1)) = F2(i*(nx-1)) - coeffX*gy(lx,i*dy,(time-1)*dt,testcase)
      END DO
      DO j=1,nx-1
-        F1(j) = F1(j) - coeffY*gx(j*dx,0.d1,(time-1)*dt,testcase)
-        F2(j) = F2(j) - coeffY*gy(j*dx,0.d1,(time-1)*dt,testcase)
-        F1((ny-2)*(nx-1) + j) = F1((ny-2)*(nx-1) + j) - coeffY*gx(j*dx,ly,(time-1)*dt,testcase)
-        F2((ny-2)*(nx-1) + j) = F2((ny-2)*(nx-1) + j) - coeffY*gy(j*dx,ly,(time-1)*dt,testcase)
+        F1(j) = F1(j) - coeffY*hx(j*dx,0.d1,(time-1)*dt,testcase)
+        F2(j) = F2(j) - coeffY*hy(j*dx,0.d1,(time-1)*dt,testcase)
+        F1((ny-2)*(nx-1) + j) = F1((ny-2)*(nx-1) + j) - coeffY*hx(j*dx,ly,(time-1)*dt,testcase)
+        F2((ny-2)*(nx-1) + j) = F2((ny-2)*(nx-1) + j) - coeffY*hy(j*dx,ly,(time-1)*dt,testcase)
      END DO
 
      F1 = F1 + U1/dt
      F2 = F2 + U2/dt
-     CALL Uzawa(P0,F1,F2,U1,U2,P,(time-1)*dt)
 
+     CALL Uzawa(P_int,F1,F2,U1,U2,P,(time-1)*dt)
+     P_int=P
   END DO
   !
   ! OPEN(unit=12,file='sol.dat',form='formatted',status='unknown',action='write')
