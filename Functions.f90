@@ -95,7 +95,7 @@ CONTAINS
      CASE(2)
        gx = x
      CASE(3)
-       gx = (1-y)*y
+       gx =Ly*Ly*(1-y/Ly)*y/Ly
     CASE default
        gx = -1
        WRITE(*,*) "bad case"

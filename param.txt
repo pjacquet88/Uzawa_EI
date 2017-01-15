@@ -5,9 +5,9 @@ FICHIER DE LECTURE DES PARAMETRES
 [Ly] longueur selon l'axe Y (en mètre)
 1.0
 [Nx] nombre de maille selon l'axe X
-50
+100
 [Ny] nombre de maille selon l'axe X
-50
+100
 [T_end] Temps final de l'expérience (en s)
 30
 [Dt] Valeur d'un pas de temps
@@ -17,12 +17,12 @@ FICHIER DE LECTURE DES PARAMETRES
 [Mu] Coefficient pour la méthode d'Uzawa
 1.0
 [EpislonGC] Epsilon pour le gradient conjugué
-1e-8
+1e-3
 [EpsilonUZ] Epsilon pour la méthode d'Uzawa
-1e-8
+1e-3
 [nIterMaxGC] Nombre d'itération max pour le gradient conjugué
 1000
 [nIterMaxUZ] Nombre d'itération max pour la méthode d'Uzawa
 1000
 p
-1
+3

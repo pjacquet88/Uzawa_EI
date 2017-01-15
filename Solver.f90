@@ -118,13 +118,13 @@ CONTAINS
     INTEGER::i,j
 
 
-    B1(bij(1,1,nx)) = -(U1(bij(1,1,nx-1)) + hx(dx,0.d0,t,testcase) - gx(0.d0,dy,t,testcase) - &
-     hx(0.d0,0.d0,t,testcase) - gx(0.d0,0.d0,t,testcase))/(2*dx)
-    B1(bij(1,ny,nx)) = -(hx(dx,ly,t,testcase) + U1(bij(1,ny-1,nx-1)) - hx(0.d0,ly,dt,testcase) - &
-    gx(0.d0,ly,dt,testcase)- gx(0.d0,ly-dy,t,testcase))/(2*dx)
-    B1(bij(nx,1,nx)) = -(hx(lx,0.d0,t,testcase) + gx(lx,0.d0,t,testcase) + gx(lx,dy,t,testcase) - &
+    B1(bij(1,1,nx)) = -(U1(bij(1,1,nx-1)) + hx(dx,0.d0,t,testcase) - 1.0*gx(0.d0,dy,t,testcase) - &
+    0.0*hx(0.d0,0.d0,t,testcase) - gx(0.d0,0.d0,t,testcase))/(2*dx)
+    B1(bij(1,ny,nx)) = -(hx(dx,ly,t,testcase) + U1(bij(1,ny-1,nx-1)) - 0.0*hx(0.d0,ly,dt,testcase) - &
+    1.0*gx(0.d0,ly,dt,testcase)- gx(0.d0,ly-dy,t,testcase))/(2*dx)
+    B1(bij(nx,1,nx)) = -(0.0*hx(lx,0.d0,t,testcase) + 1.0*gx(lx,0.d0,t,testcase) + gx(lx,dy,t,testcase) - &
     U1(bij(nx-1,1,nx-1)) - hx(lx-dx,0.d0,t,testcase))/(2*dx)
-    B1(bij(nx,ny,nx)) = -(hx(lx,ly,t,testcase) + gx(lx,ly,t,testcase) + gx(lx,ly-dy,t,testcase) - &
+    B1(bij(nx,ny,nx)) = -(0.0*hx(lx,ly,t,testcase) + 1.0*gx(lx,ly,t,testcase) + gx(lx,ly-dy,t,testcase) - &
     hx(lx-dx,ly,t,testcase) - U1(bij(nx-1,ny-1,nx-1)))/(2*dx)
 
     DO i=2,nx-1
@@ -153,13 +153,13 @@ CONTAINS
 
 
     B2(bij(1,1,nx)) = -(U2(bij(1,1,nx-1)) - hy(dx,0.d0,t,testcase) + gy(0.d0,dy,t,testcase) -&
-     gy(0.d0,0.d0,t,testcase) - hy(0.d0,0.d0,t,testcase))/(2*dy)
-    B2(bij(1,ny,nx)) = -(hy(dx,ly,t,testcase) - U2(bij(1,ny-1,nx-1)) + gy(0.d0,ly,dt,testcase) +&
-      hy(0.d0,ly,dt,testcase) - gy(0.d0,ly-dy,t,testcase))/(2*dy)
-    B2(bij(nx,1,nx)) = -(-hy(lx,0.d0,t,testcase) - gy(lx,0.d0,t,testcase) + gy(lx,dy,t,testcase) +&
-     U2(bij(nx-1,1,nx-1)) - hy(lx-dx,0.d0,t,testcase))/(2*dy)
-    B2(bij(nx,ny,nx)) = -(hy(lx,ly,t,testcase) + gy(lx,ly,t,testcase) - gy(lx,ly-dy,t,testcase) +&
-     hy(lx-dx,ly,t,testcase) - U2(bij(nx-1,ny-1,nx-1)))/(2*dy)
+     1.0*gy(0.d0,0.d0,t,testcase) - 0.0*hy(0.d0,0.d0,t,testcase))/(2*dy)
+    B2(bij(1,ny,nx)) = -(hy(dx,ly,t,testcase) - U2(bij(1,ny-1,nx-1)) + 1.0*gy(0.d0,ly,dt,testcase)&
+     +  0.0*hy(0.d0,ly,dt,testcase) - gy(0.d0,ly-dy,t,testcase))/(2*dy)
+    B2(bij(nx,1,nx)) = -(-0.0*hy(lx,0.d0,t,testcase) - 1.0*gy(lx,0.d0,t,testcase) + gy(lx,dy,t,testcase)&
+     + U2(bij(nx-1,1,nx-1)) - hy(lx-dx,0.d0,t,testcase))/(2*dy)
+    B2(bij(nx,ny,nx)) = -(0.0*hy(lx,ly,t,testcase) + 1.0*gy(lx,ly,t,testcase) - gy(lx,ly-dy,t,testcase)&
+     + hy(lx-dx,ly,t,testcase) - U2(bij(nx-1,ny-1,nx-1)))/(2*dy)
 
     DO i=2,nx-1
       B2(bij(i,1,nx)) = -(U2(bij(i,1,nx-1)) - hy((i+1)*dx,0.d0,t,testcase) + U2(bij(i-1,1,nx-1)) - hy(i*dx,0.d0,t,testcase))/(2*dy)

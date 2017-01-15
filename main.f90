@@ -2,13 +2,14 @@ PROGRAM main
   USE Solver
   USE Tools
   IMPLICIT NONE
-  REAL*8,DIMENSION(:),ALLOCATABLE:: U1,U2,F1,F2,P,P0,P_int
+  REAL*8,DIMENSION(:),ALLOCATABLE:: U1,U2,F1,F2,P,P0,P_int,TEST,KER,Uex,Uey
   INTEGER :: i,j,time
-  REAL*8 :: xi,yi,t1,t2,normDiff,normExact,x,y
+  REAL*8 :: xi,yi,t1,t2,normDiff,normExact,x,y,integrale,erreurvx,erreurvy
 
   CALL CPU_TIME(t1)
   CALL read_param("param.txt")
-  ALLOCATE(U1((nx-1)*(ny-1)),U2((nx-1)*(ny-1)),F1((nx-1)*(ny-1)),F2((nx-1)*(ny-1)),P(nx*ny),P0(nx*ny))
+  ALLOCATE(U1((nx-1)*(ny-1)),U2((nx-1)*(ny-1)),F1((nx-1)*(ny-1)),F2((nx-1)*(ny-1)),P(nx*ny),P0(nx*ny),TEST((nx)*(ny))&
+  ,KER((nx-1)*(ny-1)),Uex((nx-1)*(ny-1)),Uey((nx-1)*(ny-1)))
 
   U1 = 0
   U2 = 0
@@ -73,58 +74,113 @@ PROGRAM main
   CLOSE(12)
   CLOSE(13)
   CLOSE(14)
-
-open(unit=4,file='pression_e.dat',action='write')
+  do j=1,ny
+    do i=1,nx
+      if (modulo(i+j,2)==0) then
+     TEST(bij(i,j,nx))=1
+   ELSE
+      TEST(bij(i,j,nx))=-1
+   end if
+    end do
+  end do
+!P=Moy_0(P+0.1*TEST)
+!P=P+0.1*TEST
 open(unit=3,file='pression.dat',action='write')
 do j=1,ny
   do i=1,nx
     x=(i-0.5)*dx
     y=(j-0.5)*dy
-write(4,*),x,y,x+y-1
 write(3,*),x,y,P(bij(i,j,nx))
   end do
   write(3,*),' '
-  write(4,*),' '
 end do
 close(3)
-close(4)
 
-open(unit=4,file='vitesse_x_e.dat',action='write')
 open(unit=3,file='vitesse_x.dat',action='write')
 do j=1,ny-1
   do i=1,nx-1
     x=(i)*dx
     y=(j)*dy
-write(4,*),x,y,x
-write(3,*),x,y,U1(bij(i,j,nx-1))
+write(3,*),x,y,x+0.1*U1(bij(i,j,nx-1)),y+0.1*U2(bij(i,j,nx-1))
   end do
   write(3,*),' '
-  write(4,*),' '
 end do
 close(3)
-close(4)
 
-
-open(unit=4,file='vitesse_y_e.dat',action='write')
 open(unit=3,file='vitesse_y.dat',action='write')
 do j=1,ny-1
   do i=1,nx-1
     x=(i)*dx
     y=(j)*dy
-write(4,*),x,y,-y
 write(3,*),x,y,U2(bij(i,j,nx-1))
   end do
   write(3,*),' '
-  write(4,*),' '
 end do
 close(3)
-close(4)
 
-
-
-  DEALLOCATE(U1,U2,F1,F2,P,P0)
 
   CALL CPU_TIME(t2)
   WRITE(*,*) "Temps total (s) : ",t2-t1
 
+! TEST KER(B)
+
+do j=1,ny
+  do i=1,nx
+    if (modulo(i+j,2)==0) then
+   TEST(bij(i,j,nx))=1
+ ELSE
+    TEST(bij(i,j,nx))=-1
+ end if
+  end do
+end do
+
+OPEN(unit=3,file='TEST_0.dat',action='write')
+do j=1,ny
+  do i=1,nx
+    write(3,*),TEST(i+(j-1)*(nx))
+  end do
+  write(3,*)," "
+end do
+
+CLOSE(3)
+
+KER=B1transpose(TEST)+B2transpose(TEST)
+OPEN(unit=3,file='TEST_1.dat',action='write')
+do j=1,ny-1
+  do i=1,nx-1
+    write(3,*),KER(i+(j-1)*(nx-1))
+  end do
+  write(3,*)," "
+end do
+
+CLOSE(3)
+
+integrale=0.0d0
+
+do i=1,size(P)
+  integrale=integrale+P(i)*dx*dy
+end do
+integrale=integrale/(Lx*Ly)
+
+print*,'Integrale de P = ', integrale
+
+
+  do i=1,nx-1
+    do j=1,ny-1
+      y=(j-0.5)*dy
+      Uex(bij(i,j,nx-1))=(Ly-y)*y
+      Uey(bij(i,j,nx-1))=0.0d0
+    end do
+  end do
+
+
+erreurvx=0.0
+erreurvy=0.0
+
+erreurvx=norm(Uex-U1)/norm(Uex)
+erreurvy=norm(Uey-U2)!/norm(Uey)
+
+print*,'erreur vitesse selon x',erreurvx
+print*,'erreur vitesse selon y',erreurvy
+  DEALLOCATE(U1,U2,F1,F2,P,P0)
 END PROGRAM main
