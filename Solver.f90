@@ -52,28 +52,21 @@ CONTAINS
     iter=1
     P = P0
     P_int = P0
-    DO WHILE ((((norm(Moy_0(P)-Moy_0(P_int))/norm(Moy_0(P_int))) > epsilonUZ).AND.(iter<nIterMaxUZ)).OR.(iter==1))
+    DO WHILE ((((norm(Moy_0(P)-Moy_0(P_int))) > epsilonUZ).AND.(iter<nIterMaxUZ)).OR.(iter==1))
+
       RHS1 = F1 - B1transpose(P)
-      ! WRITE(*,*) "RHS1 : max ",maxval(F1)," min ",minval(F1)
       CALL gradConjA(U1,RHS1)
       RHS2 = F2 - B2transpose(P)
-    !  WRITE(*,*) "RHS2 : max ",maxval(RHS2)," min ",minval(RHS2)
       CALL gradConjA(U2,RHS2)
 
-    !  WRITE(*,*) "UX : max ",maxval(U1)," min ",minval(U1)
-    !  WRITE(*,*) "UY : max ",maxval(U2)," min ",minval(U2)
       P_int = P
       P = P + mu*(B1(U1,t) + B2(U2,t))
-    !  WRITE(*,*) "P : max ",maxval(P)," min ",minval(P)
 
       iter = iter + 1
-
-      ! WRITE(*,*) "RESIDU UZAWA : ",mu*norm((B1(U1,t) + B2(U2,t)))
-      ! WRITE(*,*) "ITERATION UZAWA : ",iter
-
+      P=Moy_0(P)
     END DO
 
-    WRITE(*,*) "RESIDU UZAWA : ",norm(Moy_0(P)-Moy_0(P_int))/norm(Moy_0(P_int))!mu*norm((B1(U1,t) + B2(U2,t)))
+    WRITE(*,*) "RESIDU UZAWA : ",norm(Moy_0(P)-Moy_0(P_int))!mu*norm((B1(U1,t) + B2(U2,t)))
     WRITE(*,*) "ITERATION UZAWA : ",iter
 
   END SUBROUTINE

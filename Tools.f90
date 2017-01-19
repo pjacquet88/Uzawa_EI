@@ -60,7 +60,7 @@ CONTAINS
     nl=(nx-1)*(ny-1)
     dx=lx/nx
     dy=ly/ny
-    coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))+1/dt
+    coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))!+1/dt
     coeffX=-visc*(1/(dx**2))
     coeffY=-visc*(1/(dy**2))
 

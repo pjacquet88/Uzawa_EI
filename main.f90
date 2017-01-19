@@ -16,7 +16,7 @@ PROGRAM main
   P0 = 0
   P_int=P0
 
-  DO time=1,10
+  DO time=1,1
      F1=0
      F2=0
      DO i=1,ny-1
@@ -36,8 +36,8 @@ PROGRAM main
         F2((ny-2)*(nx-1) + j) = F2((ny-2)*(nx-1) + j) - coeffY*hy(j*dx,ly,(time-1)*dt,testcase)
      END DO
 
-     F1 = F1 + U1/dt
-     F2 = F2 + U2/dt
+  !   F1 = F1 + U1/dt
+  !   F2 = F2 + U2/dt
 
      CALL Uzawa(P_int,F1,F2,U1,U2,P,(time-1)*dt)
      P_int=P
@@ -101,7 +101,7 @@ do j=1,ny-1
   do i=1,nx-1
     x=(i)*dx
     y=(j)*dy
-write(3,*),x,y,x+0.1*U1(bij(i,j,nx-1)),y+0.1*U2(bij(i,j,nx-1))
+write(3,*),x,y,U1(bij(i,j,nx-1))!*0.1,y+0.1*U2(bij(i,j,nx-1))
   end do
   write(3,*),' '
 end do
@@ -166,11 +166,12 @@ print*,'Integrale de P = ', integrale
 
 
   do i=1,nx-1
+      x=(i-0.5)*dx
     do j=1,ny-1
       y=(j-0.5)*dy
-      Uex(bij(i,j,nx-1))=(Ly-y)*y
-      Uey(bij(i,j,nx-1))=0.0d0
-    end do
+      Uex(bij(i,j,nx-1))=23.12!(Ly-y)*y
+      Uey(bij(i,j,nx-1))=21.61!0.0
+        end do
   end do
 
 
@@ -178,7 +179,7 @@ erreurvx=0.0
 erreurvy=0.0
 
 erreurvx=norm(Uex-U1)/norm(Uex)
-erreurvy=norm(Uey-U2)!/norm(Uey)
+erreurvy=norm(Uey-U2)/norm(Uey)
 
 print*,'erreur vitesse selon x',erreurvx
 print*,'erreur vitesse selon y',erreurvy
