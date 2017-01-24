@@ -63,7 +63,7 @@ CONTAINS
       P = P + mu*(B1(U1,t) + B2(U2,t))
 
       iter = iter + 1
-      P=Moy_0(P)
+      P=Moy_0(P)             ! FONCTION Moy_0 ajoutée
     END DO
 
     WRITE(*,*) "RESIDU UZAWA : ",norm(Moy_0(P)-Moy_0(P_int))!mu*norm((B1(U1,t) + B2(U2,t)))
@@ -74,7 +74,7 @@ CONTAINS
 
   FUNCTION B1transpose(P)
     IMPLICIT NONE
-    REAL*8,DIMENSION(:),INTENT(IN)               ::   P
+    REAL*8,DIMENSION(:),INTENT(IN)  ::   P
     REAL*8,DIMENSION((nx-1)*(ny-1)) :: B1transpose
     INTEGER :: i,j
 
@@ -143,8 +143,6 @@ CONTAINS
     REAL*8,INTENT(IN)::t
     REAL*8,DIMENSION(nx*ny)::B2
     INTEGER::i,j
-
-
     B2(bij(1,1,nx)) = -(U2(bij(1,1,nx-1)) - hy(dx,0.d0,t,testcase) + gy(0.d0,dy,t,testcase) -&
      1.0*gy(0.d0,0.d0,t,testcase) - 0.0*hy(0.d0,0.d0,t,testcase))/(2*dy)
     B2(bij(1,ny,nx)) = -(hy(dx,ly,t,testcase) - U2(bij(1,ny-1,nx-1)) + 1.0*gy(0.d0,ly,dt,testcase)&
@@ -168,8 +166,6 @@ CONTAINS
       B2(bij(nx,j,nx)) = -(gy(lx,(j+1)*dy,t,testcase) - gy(lx,j*dy,t,testcase) + U2(bij(nx-1,j,nx-1)) - &
       U2(bij(nx-1,j-1,nx-1)))/(2*dy)
     END DO
-
-
   END FUNCTION B2
 
 

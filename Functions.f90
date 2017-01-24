@@ -49,7 +49,7 @@ CONTAINS
 
     SELECT CASE(n)
     CASE(0)
-       fy = -gravity
+       fy = 0.0 ! -gravity
     CASE(1)
        fy = 1
      CASE(2)

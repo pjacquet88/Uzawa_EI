@@ -5,9 +5,9 @@ FICHIER DE LECTURE DES PARAMETRES
 [Ly] longueur selon l'axe Y (en mètre)
 1.0
 [Nx] nombre de maille selon l'axe X
-50
+200
 [Ny] nombre de maille selon l'axe X
-50
+200
 [T_end] Temps final de l'expérience (en s)
 30
 [Dt] Valeur d'un pas de temps
@@ -15,7 +15,7 @@ FICHIER DE LECTURE DES PARAMETRES
 [Visc] Viscosité du fluide
 1.0
 [Mu] Coefficient pour la méthode d'Uzawa
-0.5
+1.0
 [EpislonGC] Epsilon pour le gradient conjugué
 1e-6
 [EpsilonUZ] Epsilon pour la méthode d'Uzawa
@@ -24,5 +24,5 @@ FICHIER DE LECTURE DES PARAMETRES
 1000
 [nIterMaxUZ] Nombre d'itération max pour la méthode d'Uzawa
 1000
-p
-0
+p      ! CHOIX DU CAS TEST: 0 pour TC0a (modifier fy dans Functions.90 pour avoir TC0b) 1 pour TC1a, 2 pour TC1b, 3 pour Poiseuille
+2

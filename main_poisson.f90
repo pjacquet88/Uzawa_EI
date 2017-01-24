@@ -1,3 +1,5 @@
+!MAIN POUR LE PROBLEME DE POISSON
+
 PROGRAM main_poisson
   USE Functions
   USE Solver

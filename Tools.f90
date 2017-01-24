@@ -60,7 +60,7 @@ CONTAINS
     nl=(nx-1)*(ny-1)
     dx=lx/nx
     dy=ly/ny
-    coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))!+1/dt
+    coeffDiag=2*visc*(1/(dx**2)+1/(dy**2))!+1/dt    ! A DECOMMENTER POUR PASSER EN STATIONNAIRE
     coeffX=-visc*(1/(dx**2))
     coeffY=-visc*(1/(dy**2))
 
@@ -129,21 +129,16 @@ CONTAINS
     ! END IF
 
     OPEN(unit=2, file=F_NAME, action="write")
-
-
     DO i=1,Nx
        DO j=1,Ny
-
-
           WRITE(2,*),i*dx,j*dy,U(bij(i,j,Ny))
-
        END DO
        WRITE(2,*)
     END DO
     CLOSE(2)
   END SUBROUTINE printvector
 
-  FUNCTION matmulA(X)
+  FUNCTION matmulA(X)             ! MATRICE DU LAPLACIEN 2D
     IMPLICIT NONE
     REAL*8,DIMENSION(:),INTENT(IN) :: X
     REAL*8,DIMENSION(SIZE(X)) :: matmulA
